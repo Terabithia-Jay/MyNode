@@ -13,7 +13,11 @@
 
   
 
-- postman 可以帮助向服务器发送各种请求，模拟发送请求（不用在html新弄一个表单发送）
+  
+
+  ## postman 
+
+  - 可以帮助向服务器发送各种请求，模拟发送请求（不用在html新弄一个表单发送）
 
   
 
@@ -474,6 +478,8 @@ res.setHeader("Access-Control-Allow-Origin", "*")
        ```
 
 
+
+## 补充
 
 - 发get请求简写：
 

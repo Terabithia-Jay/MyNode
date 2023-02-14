@@ -9,7 +9,7 @@
 
 ## 
 
-## 1.通过script标签来使用Vue
+## 1.通过script标签使用Vue
 
 *适用于老项目改造成*vue
 
@@ -53,7 +53,7 @@
 </script>
 ```
 
-## 2.通过vite来使用Vue
+## 2.通过vite使用Vue
 
 *脚手架的搭建流程*
 
@@ -132,7 +132,7 @@
 
 - 启动 `yarn dev`
 
-## 3.通过单文件组件（SFC）来使用vue
+## 3.通过单文件组件使用vue
 
 *因为使用上面的方法在template字符串里写，很麻烦，单文件组件不需要template属性*
 
@@ -215,7 +215,7 @@
 
 
 
-### 选项式API	
+## 选项式API	
 
 - data( ) { } 组件的实例vm：（数据代理 -- data(){} -- $data）
 
@@ -275,10 +275,11 @@
       ```
       
 
-- methods: { }
+  ### methods: {  }
+
   - data( ) { } 用来指定实例对象中的响应式属性
   - methods: { } 用来指定实例对象中的方法，它是一个对象，可以在里面定义多个方法（函数），会挂载到组件实例上，可以通过组件实例来调用这些方法，methods中的函数的 this 会被自动绑定为组件实例（proxy，也就是vm，也会数据代理）
-  
+
     ```js
     <script>
     	export default {
@@ -306,12 +307,17 @@
     // vm.sum(123, 456)
     ```
 
-- computed: { }	用来指定计算属性，也会挂载到组件实例上，数据代理
+  
+
+  ### computed: {  }
+
+  - 用来指定计算属性，也会挂载到组件实例上，数据代理
+
   - computed 能做的 methods 也能做，但是有区别：
     1. computed 只在其依赖的数据（比如computed里面计算的age属性，外部没有修改age的值，而修改了别的值，这样computed不会被调用）发生变化时才会重新执行（渲染），computed 会对数据进行缓存，methods 没有
     2. 而 methods 每次组件重新渲染都会调用
     3. 在计算属性 computed 的 getter 中，尽量只做读取相关的逻辑：只读数据不改数据。（methods 可以改）
-    
+
        ```js
        // 选项式API
        <script>
@@ -350,8 +356,9 @@
        	<button @click="changeMsg">点我一下</button>	// 这里click调用changeMsg是methods方法可不写()
        </template>
        ```
-    
+
        
+
 
 
 
@@ -359,7 +366,9 @@
 
 
 
-### 组合式API：setup( ){ }
+## 组合式API：setup
+
+### reactive( )  
 
 ```js
 // 老式写法：
@@ -418,9 +427,10 @@
 </template>
 ```
 
-- ref( )
-  - 因为 reactive() 里面只能传对象{ }，不能处理原始值（比如1，2，3）
-  - ref在生成响应式代理时，是将值包装为一个对象
+### ref(  )
+
+- 因为 reactive() 里面只能传对象{ }，不能处理原始值（比如1，2，3）
+- ref在生成响应式代理时，是将值包装为一个对象
 
 ```js
 <script setup>
@@ -462,12 +472,13 @@
 
 
 
-- 模板语法：
-  - 在模板中，可以直接访问到组件中声明的变量    `<h1>{{ msg }}<h1>`
+### 模板语法
 
-  - 部分全局对象也可以用：Date、Math、RegExp...`<h1>{{ new Date( ) }}<h1>`
+- 在模板中，可以直接访问到组件中声明的变量    `<h1>{{ msg }}<h1>`
 
-  - 也可以通过app对象来向vue中添加一些全局变量：app.config.globalProperties
+- 部分全局对象也可以用：Date、Math、RegExp...`<h1>{{ new Date( ) }}<h1>`
+
+- 也可以通过app对象来向vue中添加一些全局变量：app.config.globalProperties
 
 ```js
 // main.js：
@@ -480,120 +491,122 @@
 	<h1>{{ hello }}<h1>
 ```
 
-- 插值语法{{ }}中只能使用表达式（有返回值的语句）
+### 插值语法
 
-  - 插值就是在修改元素的textContent，如果内容中有标签，标签会被转义显示，不会作为标签生效（避免xss攻击）
+- 插值语法{{  }}中只能使用表达式（有返回值的语句）
 
-    - 如果不要这种情况：
+- 插值就是在修改元素的textContent，如果内容中有标签，标签会被转义显示，不会作为标签生效（避免xss攻击）
 
-      - 指令：用来设置标签如果显示内容，使用 v- 开头
+  - 如果不要这种情况：
 
-        - v-text 将表达式的值作为元素的textComtent插入，跟{{ }}一样
+    - 指令：用来设置标签如果显示内容，使用 v- 开头
 
-        - v-html 将表达式的值作为元素的innerHTML插入（有xss攻击的风险）
+      - v-text 将表达式的值作为元素的textComtent插入，跟{{ }}一样
 
-          ```js
-          const html = "<h1>呵呵呵</h1>"
-          <div>{{ html }}<div>		-->  	页面：<h1>呵呵呵</h1>
-          <div v-text="html"></div>		-->		页面：<h1>呵呵呵</h1>
-          <div v-html="html"></div>		-->		页面：呵呵呵
-          ```
+      - v-html 将表达式的值作为元素的innerHTML插入（有xss攻击的风险）
 
-        - v-bind 动态为标签设置属性，可以简写为冒号：
+        ```js
+        const html = "<h1>呵呵呵</h1>"
+        <div>{{ html }}<div>		-->  	页面：<h1>呵呵呵</h1>
+        <div v-text="html"></div>		-->		页面：<h1>呵呵呵</h1>
+        <div v-html="html"></div>		-->		页面：呵呵呵
+        ```
 
-          ```js
-          <script>
-              import { ref } from 'vue'
-              const imgPath = ref("/imgs/messi.png")
-              const attrs = {
-                  id: "box1",
-                  class: "hello"
-              }
-              function changeImg() {
-                  imgPath.value = "/imgages/neimar.png"
-              }
-          	const attrName = "title"
-              const attrValue = "这是一个title"
-          	const isDisabled = false
-          </script>
-          <template>
-              <button @click="changeImg">切换图片</button>
-              <img :[attrName]="attrValue" v-bind:src="imgPath">		// 简写：<img :src="imgPath">
-                  // :[attrName]="attrValue"	可以动态的设置各种属性
-              <div :="attrs"></div>		-->		<div id="box1" class="hello"></div>	// 设置多个标签属性
-              <input :disabled="isDisabled" :style="{}" :class=""/>
-          </template>
-          ```
+      - v-bind 动态为标签设置属性，可以简写为冒号：
+
+        ```js
+        <script>
+            import { ref } from 'vue'
+            const imgPath = ref("/imgs/messi.png")
+            const attrs = {
+                id: "box1",
+                class: "hello"
+            }
+            function changeImg() {
+                imgPath.value = "/imgages/neimar.png"
+            }
+        	const attrName = "title"
+            const attrValue = "这是一个title"
+        	const isDisabled = false
+        </script>
+        <template>
+            <button @click="changeImg">切换图片</button>
+            <img :[attrName]="attrValue" v-bind:src="imgPath">		// 简写：<img :src="imgPath">
+                // :[attrName]="attrValue"	可以动态的设置各种属性
+            <div :="attrs"></div>		-->		<div id="box1" class="hello"></div>	// 设置多个标签属性
+            <input :disabled="isDisabled" :style="{}" :class=""/>
+        </template>
+        ```
 
 
 
 
 
-- style-scoped
+### style-scoped
 
-  - 可以直接通过style标签来编写样式，在style标签写的样式是全局样式，也会影响到所有组件同类名的样式
+- 可以直接通过style标签来编写样式，在style标签写的样式是全局样式，也会影响到所有组件同类名的样式
+
+  ```js
+  <script setup>
+      import Mybox from './components/Mybox.vue'
+  </script>
+  <template>
+  	<Mybox></Mybox>		// 引入子组件直接写标签会自动引入上面的import
+  </template>
+  <style scoped>
+          
+  </style>
+  ```
+
+- `<style scoped>` 这样样式将成为局部样式，只对当前组件生效（只适用于单根组件）
+
+  - 使用scoped时，vue会自动为组件中的所有元素生成一个随机的属性（比如：data-v-7a7a37b1）
+
+  - 生成后，所有的选择器都会在最后添加一个[data-v-7a7a37b1]
+
+    .box1		-->		.box1[data-v-7a7a37b1]		属性选择器，在.box1中找data-v-7a7a37b1的标签
+
+  - 随机生成的属性除了会添加到当前组件内的所有元素，还会添加到当前组件引入的子组件的根元素（最大的div）上，这样设计是为了可以通过父组件来为子组件设置一些样式
 
     ```js
-    <script setup>
-        import Mybox from './components/Mybox.vue'
-    </script>
+    // 单根组件：子组件的template标签里只有一个最大的标签div
     <template>
-    	<Mybox></Mybox>		// 引入子组件直接写标签会自动引入上面的import
+        <div>
+        	<h1>hello</h1>
+    		<div>我是box1</div>
+        </div>
     </template>
+    // 多根组件：
+    <template>
+        <h1>hello</h1>
+    	<div>我是box1</div>
+    </template>
+    
+    
     <style scoped>
-            
+        // 深度选择器 :deep()
+    		// 比如父组件有h2，子组件也有h2，在父组件设置h2不会影响子组件的h2，但是又想在父组件设置
+    	.app :deep(h2){		// 表示所有app下的h2都设置
+        	color: yellow
+    	}
+    
+    	// 全局选择器 :global()，跟下面的一样，用这个
+    	:global(div) {
+            border: 1px solid red
+        }
+    </style>
+    // 可以写多个style，这个不写scoped，表示全局的样式
+    <style>
+        div {
+            border: 1px solid red		// 表示全局所有的div都加上边框
+        }
     </style>
     ```
 
-  - `<style scoped>` 这样样式将成为局部样式，只对当前组件生效（只适用于单根组件）
+### style-module
 
-    - 使用scoped时，vue会自动为组件中的所有元素生成一个随机的属性（比如：data-v-7a7a37b1）
-
-    - 生成后，所有的选择器都会在最后添加一个[data-v-7a7a37b1]
-
-      .box1		-->		.box1[data-v-7a7a37b1]		属性选择器，在.box1中找data-v-7a7a37b1的标签
-
-    - 随机生成的属性除了会添加到当前组件内的所有元素，还会添加到当前组件引入的子组件的根元素（最大的div）上，这样设计是为了可以通过父组件来为子组件设置一些样式
-
-      ```js
-      // 单根组件：子组件的template标签里只有一个最大的标签div
-      <template>
-          <div>
-          	<h1>hello</h1>
-      		<div>我是box1</div>
-          </div>
-      </template>
-      // 多根组件：
-      <template>
-          <h1>hello</h1>
-      	<div>我是box1</div>
-      </template>
-      
-      
-      <style scoped>
-          // 深度选择器 :deep()
-      		// 比如父组件有h2，子组件也有h2，在父组件设置h2不会影响子组件的h2，但是又想在父组件设置
-      	.app :deep(h2){		// 表示所有app下的h2都设置
-          	color: yellow
-      	}
-      
-      	// 全局选择器 :global()，跟下面的一样，用这个
-      	:global(div) {
-              border: 1px solid red
-          }
-      </style>
-      // 可以写多个style，这个不写scoped，表示全局的样式
-      <style>
-          div {
-              border: 1px solid red		// 表示全局所有的div都加上边框
-          }
-      </style>
-      ```
-
-
-- style-module
-  - 自动对模块中的类名进行hash哈希化来确保类名的唯一性
-  - 通过 $style.类名 来使用
+- 自动对模块中的类名进行hash哈希化来确保类名的唯一性
+- 通过 $style.类名 来使用
 
 ```js
 <div :class:"$style.box1">哈哈哈</div>
@@ -621,169 +634,177 @@ const style = {
 
 
 
-- props：父组件给子组件传递数据
+## props
 
-  - 子组件的数据通常不会在子组件直接定义，这样会导致数据和视图发生耦合，子组件的数据通常会在创建组件实例时确定（写在父组件）
+- 父组件给子组件传递数据
 
-    ```js
-    const player = reactive({
-      name: "梅西",
-      img: "/images/messi.png",
-      rate: 1,
-      hot: 433760
-    })
-    ```
-
-  - 父组件可以通过 props 来将数据传递给子组件
-
-    1. 先在子组件中定义props
-
-       ```js
-       const props = defineProps(["item", "maxLength"])		// 驼峰命名
-       // const item = props.item
-       ```
-
-    2. 通过父组件的子组件实例标签传递数据
-
-       ```js
-       <TabItem :item="player"  maxLength="10" max-length="10"></TabItem>		// 也可以这么传：maxLength="10"
-       ```
-
-    3. 使用数据
-
-       ```html
-       <img :src="item.img" :alt="item.name" />		
-       <span>{{ item.rate }}</span>
-       <h1>{{ props.maxLength }}</h1>
-       ```
-
-  - 父组件传给子组件的props在子组件是只读的，不能在子组件中进行修改的操作，reactive或者ref的数据要确保只有一个地方能改，就是创建他们的地方的组件（单向数据流）。最好不要通过子组件去修改父组件的数据，如果真要改，通过自定义事件
-  
-  - 可以对props进行配置：
-  
-    ```js
-    const props = defineProps({		// 上面的是传数组（简单配置），这个传对象（完整配置）
-        count: Numver,	// 对传过来的数据进行类型限制，还是可以接收到数据，只是在控制台会有错误提示，开发时可以用
-        obj: Object,
-        maxLength: {	// 也可以对传过来的数据进行配置
-            type: String,	// 跟上面的限制类型一样
-            required: true,	// 默认为false，true表示必须得传这个值才行
-            default: "哈哈",	// 如果不传数据过来，则默认值设置为
-            validator(value){	// 检查传过来的数据是否合法，value是传过来的值
-                return value !== "嘻嘻"	// 可以制定正则
-            }
-        }
-    })
-    ```
-  
-    
-
-
-
-
-
-- v-show：可以根据表达式的值来决定元素是否显示（通过display，东西还在，只是隐藏，不会涉及到组件的重新渲染）。切换性能好，初始化性能差，初始化时会将所有的进行初始化，即使暂时不显示
-
-  ```html
-  const isShow = ref(true)
-  
-  <div v-show="isShow"></div>
-  <button @click="isShow = !isShow">切换</button>
-  ```
-
-- v-if：跟v-show一样，但是会将元素直接删除，会重新渲染。切换性能差，初始化性能好，用的时候才会初始化。可以配合`<template>`标签使用，可以和 `v-else` 使用
-
-  ```html
-  <div v-if="isShow">
-      <h1>我是v-if</h1>
-  </div>
-  <div v-else>
-      <h1>我是v-if中的else</h1>
-  </div>
-  <div v-else-if>
-      <h1>我是v-if中的else-if</h1>
-  </div>
-  
-  <template v-if='isShow'>	// 在网页中不显示template标签，只显示h1和h2标签
-  	<h1>我是h1</h1>
-      <h2>我是h2</h2>
-  </template>
-  <button @click="isShow = !isShow">切换</button>
-  ```
-
-- `<component></component>`标签（动态组件），也可以实现切换效果
-
-  - component最终以什么标签呈现由 is 属性决定
-
-    ```html
-    <template>
-    	<component is='div'>我是component</component>		-->		<div>我是component</div>
-    </template>
-    ```
-
-  - component的is里面也可以直接写组件
-
-    ```html
-    <script>
-    	import { ref } from 'vue'
-        import A from './components/A.app'
-        import B from './components/B.app'
-        const isShow = ref(true)
-    </script>
-    <template>
-        <button @click="isShow = !isShow">切换</button>
-    	<component :is='isShow? A : B'></component>		也可以实现切换效果
-    </template>
-    ```
-
-- 动态绑定css
+- 子组件的数据通常不会在子组件直接定义，这样会导致数据和视图发生耦合，子组件的数据通常会在创建组件实例时确定（写在父组件）
 
   ```js
-  <script setup>
-      import { computed } from 'vue';
-      const props = defineProps(["src", "alt", "rate"])
-      const color = computed(() => {
-          if (props.rate == 1) {
-              return "rgb(254, 45, 70)"
-          } else if (props.rate == 2) {
-              return "rgb(245, 102, 1)"
-          } else {
-              return "rgb(247, 169, 1)"
-          }
-      })
-  </script>
-  
-  background-color: v-bind(color);
+  const player = reactive({
+    name: "梅西",
+    img: "/images/messi.png",
+    rate: 1,
+    hot: 433760
+  })
   ```
 
-- v-for
+- 父组件可以通过 props 来将数据传递给子组件
 
-  - 使用v-for时，比如在li前面添加unshift一个li，如果里面有input框，input框里的内容会发生顺序错乱，因为v-for添加元素是根据从第一个到最后一个进行对比，有不同才添加上去，原来一样的dom就不会动，不会渲染，但是用unshift在前面添加则会错乱
-    - 可以为元素指定一个唯一的key，元素在比较时就会按照相同的key去比较而不是顺序（相同的key对比，而不是按顺序从上往下比）
+  1. 先在子组件中定义props
+
+     ```js
+     const props = defineProps(["item", "maxLength"])		// 驼峰命名
+     // const item = props.item
+     ```
+
+  2. 通过父组件的子组件实例标签传递数据
+
+     ```js
+     <TabItem :item="player"  maxLength="10" max-length="10"></TabItem>		// 也可以这么传：maxLength="10"
+     ```
+
+  3. 使用数据
+
+     ```html
+     <img :src="item.img" :alt="item.name" />		
+     <span>{{ item.rate }}</span>
+     <h1>{{ props.maxLength }}</h1>
+     ```
+
+- 父组件传给子组件的props在子组件是只读的，不能在子组件中进行修改的操作，reactive或者ref的数据要确保只有一个地方能改，就是创建他们的地方的组件（单向数据流）。最好不要通过子组件去修改父组件的数据，如果真要改，通过自定义事件
+
+- 可以对props进行配置：
+
+  ```js
+  const props = defineProps({		// 上面的是传数组（简单配置），这个传对象（完整配置）
+      count: Numver,	// 对传过来的数据进行类型限制，还是可以接收到数据，只是在控制台会有错误提示，开发时可以用
+      obj: Object,
+      maxLength: {	// 也可以对传过来的数据进行配置
+          type: String,	// 跟上面的限制类型一样
+          required: true,	// 默认为false，true表示必须得传这个值才行
+          default: "哈哈",	// 如果不传数据过来，则默认值设置为
+          validator(value){	// 检查传过来的数据是否合法，value是传过来的值
+              return value !== "嘻嘻"	// 可以制定正则
+          }
+      }
+  })
+  ```
+
   
-  
+
+
+
+
+
+## v-show
+
+- 可以根据表达式的值来决定元素是否显示（通过display，东西还在，只是隐藏，不会涉及到组件的重新渲染）。切换性能好，初始化性能差，初始化时会将所有的进行初始化，即使暂时不显示
+
+
+```html
+const isShow = ref(true)
+
+<div v-show="isShow"></div>
+<button @click="isShow = !isShow">切换</button>
+```
+
+## v-if
+
+- 跟v-show一样，但是会将元素直接删除，会重新渲染。切换性能差，初始化性能好，用的时候才会初始化。可以配合`<template>`标签使用，可以和 `v-else` 使用
+
+```html
+<div v-if="isShow">
+    <h1>我是v-if</h1>
+</div>
+<div v-else>
+    <h1>我是v-if中的else</h1>
+</div>
+<div v-else-if>
+    <h1>我是v-if中的else-if</h1>
+</div>
+
+<template v-if='isShow'>	// 在网页中不显示template标签，只显示h1和h2标签
+	<h1>我是h1</h1>
+    <h2>我是h2</h2>
+</template>
+<button @click="isShow = !isShow">切换</button>
+```
+
+## component(动态组件标签)
+
+- 也可以实现切换效果
+
+- component最终以什么标签呈现由 is 属性决定
+
   ```html
-  <script setup>
-      import { ref } from 'vue';
-      const arr = ref(["孙悟空","猪八戒","沙和尚","唐僧",])
-  </script>
-  
   <template>
-      <ul>
-      	<li v-for="name in arr">{{ name }}</li>
-  		<li v-for="(name, index) in arr">{{ index }} - {{ name }}</li>
-  		<li v-for="{ id, name, gender } in arr">{{ name }} - {{ age }} - {{ gender }}</li>	// 解构对象赋值
-           <li v-for="{ id, name, gender } in arr" :key="id">{{ name }} - {{ age }} - {{ gender }}</li>
-      </ul>
+  	<component is='div'>我是component</component>		-->		<div>我是component</div>
   </template>
   ```
-  
+
+- component的is里面也可以直接写组件
+
+  ```html
+  <script>
+  	import { ref } from 'vue'
+      import A from './components/A.app'
+      import B from './components/B.app'
+      const isShow = ref(true)
+  </script>
+  <template>
+      <button @click="isShow = !isShow">切换</button>
+  	<component :is='isShow? A : B'></component>		也可以实现切换效果
+  </template>
+  ```
+
+## 动态绑定css
+
+```js
+<script setup>
+    import { computed } from 'vue';
+    const props = defineProps(["src", "alt", "rate"])
+    const color = computed(() => {
+        if (props.rate == 1) {
+            return "rgb(254, 45, 70)"
+        } else if (props.rate == 2) {
+            return "rgb(245, 102, 1)"
+        } else {
+            return "rgb(247, 169, 1)"
+        }
+    })
+</script>
+
+background-color: v-bind(color);
+```
+
+## v-for
+
+- 使用v-for时，比如在li前面添加unshift一个li，如果里面有input框，input框里的内容会发生顺序错乱，因为v-for添加元素是根据从第一个到最后一个进行对比，有不同才添加上去，原来一样的dom就不会动，不会渲染，但是用unshift在前面添加则会错乱
+  - 可以为元素指定一个唯一的key，元素在比较时就会按照相同的key去比较而不是顺序（相同的key对比，而不是按顺序从上往下比）
+
+
+```html
+<script setup>
+    import { ref } from 'vue';
+    const arr = ref(["孙悟空","猪八戒","沙和尚","唐僧",])
+</script>
+
+<template>
+    <ul>
+    	<li v-for="name in arr">{{ name }}</li>
+		<li v-for="(name, index) in arr">{{ index }} - {{ name }}</li>
+		<li v-for="{ id, name, gender } in arr">{{ name }} - {{ age }} - {{ gender }}</li>	// 解构对象赋值
+         <li v-for="{ id, name, gender } in arr" :key="id">{{ name }} - {{ age }} - {{ gender }}</li>
+    </ul>
+</template>
+```
 
 
 
 
 
-### 插槽（slot）
+## 插槽（slot）
 
 - 用props传数据只能一层一层传，如果数据太多传着很麻烦
 
@@ -808,94 +829,93 @@ const style = {
 </template>
 ```
 
-- 具名插槽（传给指定的插槽），简写 #
+### 具名插槽（简写#）
+
+- 传给指定的插槽
+
+```html
+// App.vue：
+<script setup>
+    import MyWrapper from "./components/MyWrapper.vue"
+</script>
+
+<template>
+	<MyWrapper>
+    	<template v-slot:h1>一级标题</template>		// 在组件MyWrapper里必须先写template标签
+        <template #h2>二级标题</template>   	// #简写
+    </MyWrapper>
+</template>
+
+// MyWrapper.vue:
+<template>
+	<div>
+    	<h1>
+    		<slot name="h1"></slot>
+             <slot>插槽的默认内容</slot>		// 不指定name的是默认插槽
+    	</h1>
+		<h2>
+    		<slot name="h2"></slot>
+    	</h2>
+    </div>
+</template>
+```
+
+- 兄弟间传数据（子传父，父传另一个子）
 
   ```html
   // App.vue：
-  <script setup>
-      import MyWrapper from "./components/MyWrapper.vue"
-  </script>
+      <script setup>
+          import A from "./components/A.vue"
+          import SlotDemo from "./components/SlotDemo.vue"
+      </script>
   
-  <template>
-  	<MyWrapper>
-      	<template v-slot:h1>一级标题</template>		// 在组件MyWrapper里必须先写template标签
-          <template #h2>二级标题</template>   	// #简写
-      </MyWrapper>
-  </template>
+      <template>
+          <SlotDemo>
+              <template #s2="slotProps">	// 在#s2后面等号取个收取来自SlotDemo.vue中<slot>传过来的数据的名字，										  或者直接解构#s2="{age, gender}"
+                  <A :name='slotProps.stuName'></A>	// 通过slotProps.stuName传给A组件，通过s2传过来的只能													 在s2访问到数据
+              </template>   	
+          </SlotDemo>
+      </template>
   
-  // MyWrapper.vue:
-  <template>
-  	<div>
-      	<h1>
-      		<slot name="h1"></slot>
-               <slot>插槽的默认内容</slot>		// 不指定name的是默认插槽
-      	</h1>
-  		<h2>
-      		<slot name="h2"></slot>
-      	</h2>
-      </div>
-  </template>
+  // SlotDemo.vue：
+      <script setup>
+          // 要把这些数据传给A.vue，先通过<slot>传给父组件App.vue，再由App.vue的A组件标签传给A.vue
+          const stu = {
+              name: "孙悟空",
+              age: 18,
+              gender: "男"
+          }
+          const stuName = "孙悟空"
+          const age = 18
+          const gender = "男"
+      </script>
+  
+  	<template>
+          <div>
+              // 这个插槽就是App.vue传过来的A.vue的组件，把数据写在这个插槽里传给App.vue的s2的插槽入口
+              <slot name="s2" :gender="gender" :age="age" :stuName="stuName" :stu="stu"></slot>
+          </div>
+  	</template>
+  
+  // A.vue
+      <script setup>
+      	const props = defineProps(["name"])
+      </script>
+  
+      <template>
+          <h1>A组件 {{ props.name }}</h1>
+      </template>
   ```
 
-  - 兄弟间传数据（子传父，父传另一个子）
-  
-    ```html
-    // App.vue：
-        <script setup>
-            import A from "./components/A.vue"
-            import SlotDemo from "./components/SlotDemo.vue"
-        </script>
-    
-        <template>
-            <SlotDemo>
-                <template #s2="slotProps">	// 在#s2后面等号取个收取来自SlotDemo.vue中<slot>传过来的数据的名字，										  或者直接解构#s2="{age, gender}"
-                    <A :name='slotProps.stuName'></A>	// 通过slotProps.stuName传给A组件，通过s2传过来的只能													 在s2访问到数据
-                </template>   	
-            </SlotDemo>
-        </template>
-    
-    // SlotDemo.vue：
-        <script setup>
-            // 要把这些数据传给A.vue，先通过<slot>传给父组件App.vue，再由App.vue的A组件标签传给A.vue
-            const stu = {
-                name: "孙悟空",
-                age: 18,
-                gender: "男"
-            }
-            const stuName = "孙悟空"
-            const age = 18
-            const gender = "男"
-        </script>
-    
-    	<template>
-            <div>
-                // 这个插槽就是App.vue传过来的A.vue的组件，把数据写在这个插槽里传给App.vue的s2的插槽入口
-                <slot name="s2" :gender="gender" :age="age" :stuName="stuName" :stu="stu"></slot>
-            </div>
-    	</template>
-    
-    // A.vue
-        <script setup>
-        	const props = defineProps(["name"])
-        </script>
-    
-        <template>
-            <h1>A组件 {{ props.name }}</h1>
-        </template>
-    ```
-    
-  - 动态具名插槽
-  
-    ```html
-    <template #[dynamicSlotName]></template>	// 通过[]来放变量插槽名
-    ```
-  
+### 动态具名插槽
+
+```html
+<template #[dynamicSlotName]></template>	// 通过[]来放变量插槽名
+```
 
 
 
-
-
-### 事件（v-on）
+## 事件（v-on简写@）
 
 - 简写：`@`
 
@@ -926,6 +946,46 @@ const style = {
     foo++	-->	内联
 
     foo()	-->	内联
+    
+    
+
+## 事件修饰符
+
+### .stop
+
+- 阻止冒泡
+- 原生js：stopPropagation()
+
+### .capture
+
+- 在捕获阶段触发事件
+
+### .prevent
+
+- 取消默认行为
+- 比如点击超链接跳转、点击sumit提交表单
+- 原生js：preventDefault()
+
+### .self
+
+- 只有事件由自身触发时才会有效
+
+### .once
+
+- 绑定一个一次性的事件
+
+### .passive
+
+- 用于提升滚动事件的性能
+
+### 按键修饰符
+
+- 比如：
+  - .enter
+  - .space
+  - .tab
+  - .down
+  - .esc
 
 ```html
 <script setup>
@@ -971,6 +1031,86 @@ function clickHandler2() {
             <div class="box3" @click.stop="boxHandler2('box3')">box3</div>
         </div>
     </div>
+    
+    
+    // 按键修饰符
+    <input @keyup.enter="sumit">
+    <input @keyup.page-down="onPageDown">
+</template>
+```
+
+
+
+## 属性的透传
+
+- 在组件标签上设置属性，会自动传递给子组件的根元素成为子组件的属性，如果子组件也是组件标签，则会一层一层往下传，这样就可以方便在父组件给子组件设置属性
+
+- 透传会发生在没有被声明为props和emit的属性上（如果有被声明props的属性，则这个属性不会发生透传）
+
+  ```js
+  const props = defineProps(["name"])		// name这个属性不会发生透传
+  ```
+
+- 自动的透传只适用单根组件（子组件的template只有一个最大的标签）
+
+  - 如果是多根组件，透传并不知道要传给谁，则需要手动指定添加到哪个元素上
+    1. 在模板 template 标签中，可以通过$attrs来访问透传过来的属性
+    2. 在脚本 script 标签中，可以通过useAttrs()来获取透传过来的属性（先引入再使用）
+
+- 如果是单根组件，会全部发生自动透传，但只想指定部分属性透传。首先先禁止自动透传，然后再手动通过 $attrs 指定部分属性透传
+
+  - 禁止自动透传：在子组件中向外导出一个配置对象
+
+    ```js
+    <script>
+        export default {
+            inheritAttrs: false
+        }
+    </script>
+    ```
+
+```js
+// App.vue：
+import C from "./components/C.vue"
+<script setup>
+    function showMsg() {
+        alert("hello")
+    }
+</script>
+
+<template>
+    <C class="box2" style="color: red" @click="showMsg"></C>	// 透传过去的class不会覆盖子组件原有的class，会整合
+</template>
+<style scoped></style>
+
+
+// C.vue
+<script setup>
+    // 引入useAttrs
+    import { useAttrs } from "vue"
+
+    // 在脚本script中，可以通过useAttrs()来获取透传过来的属性
+    const attrs = useAttrs()
+    console.log(attrs)
+</script>
+
+<script>
+    export default {
+        inheritAttrs: false
+    }
+</script>
+
+<template>
+    <h2 class="box3" style="font-size: 60px">我是组件C</h2>
+
+	// 在模板template中，可以通过$attrs来访问透传过来的属性，多根组件中可以手动指定透传过来的属性要添加到哪些元素
+	{{ $attrs }}
+
+	// 使用：通过 $attrs.属性
+	<h3 :class="$attrs.class" :style="$attrs.style">我也是组件C</h3>
+
+	// 也可以这样：表示把透传过来的所有属性作为h3的属性
+	<h3 :="$attrs">我是h3</h3>
 </template>
 ```
 

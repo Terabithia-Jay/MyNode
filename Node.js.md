@@ -64,7 +64,7 @@ Promise.reject("出错了").catch(reason => console.log(reason))
 ```
 
 ```js
-Promise.all([sum(123, 456), sum(5, 6), sum(33, 44)]).then(result => console.log(result))    // 可以返回多个promise对							象的结果（结果自己也是promise,就可以then），如果里面有一个错误reject的结果就都不返回结果了
+Promise.all([sum(123, 456), sum(5, 6), sum(33, 44)]).then(result => console.log(result))    // 可以返回多个promise对象的结果（结果自己也是promise,就可以then），如果里面有一个错误reject的结果就都不返回结果了
 Promise.allSettled()  // 可以返回多个promise对象的结果，无论成功或失败
 Promise.race([sum(123, 456), sum(5, 6), sum(33, 44)])  // 返回里面执行的最快的那个的结果，不考虑成功或失败
 Promise.any()   // 跟race差不多，返回里面执行的最快的那个的结果，只有成功的结果
